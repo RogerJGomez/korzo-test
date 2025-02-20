@@ -5,6 +5,7 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
+import Charts from 'src/pages/charts';
 import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
@@ -63,6 +64,7 @@ export function Router() {
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
         { path: 'blog', element: <BlogPage /> },
+        { path: 'stocks', element: <Charts /> },
       ],
     },
     {
