@@ -7,15 +7,14 @@ import { AuthKitProvider } from '@workos-inc/authkit-react';
 import App from './app';
 
 // ----------------------------------------------------------------------
+const CLIENT_ID = import.meta.env.VITE_WORKOS_CLIENT_ID || '';
+const REDIRECT_URI = import.meta.env.VITE_WORKOS_REDIRECT_URI || 'http://localhost:3039/';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <StrictMode>
-    <AuthKitProvider
-      clientId="client_01JMGG6DWRZDBVW1H2Y0JD97YZ"
-      redirectUri="http://localhost:3039/"
-    >
+    <AuthKitProvider clientId={CLIENT_ID} redirectUri={REDIRECT_URI}>
       <HelmetProvider>
         <BrowserRouter>
           <Suspense>
