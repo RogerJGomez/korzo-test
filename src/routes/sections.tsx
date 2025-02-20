@@ -1,4 +1,5 @@
 import { lazy, Suspense } from 'react';
+import { useAuth } from '@workos-inc/authkit-react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -20,7 +21,7 @@ export const Page404 = lazy(() => import('src/pages/page-not-found'));
 // ----------------------------------------------------------------------
 
 const renderFallback = (
-  <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
+  <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto" height="100vh">
     <LinearProgress
       sx={{
         width: 1,
@@ -32,15 +33,30 @@ const renderFallback = (
   </Box>
 );
 
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isLoading, user } = useAuth();
+  if (isLoading) {
+    return renderFallback;
+  }
+
+  return user ? children : <Navigate to="/sign-in" replace />;
+}
+
 export function Router() {
   return useRoutes([
     {
       element: (
-        <DashboardLayout>
-          <Suspense fallback={renderFallback}>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        <ProtectedRoute>
+          <DashboardLayout>
+            <Suspense fallback={renderFallback}>
+              <Outlet />
+            </Suspense>
+          </DashboardLayout>
+        </ProtectedRoute>
       ),
       children: [
         { element: <HomePage />, index: true },

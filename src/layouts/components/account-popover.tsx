@@ -1,6 +1,7 @@
 import type { IconButtonProps } from '@mui/material/IconButton';
 
 import { useState, useCallback } from 'react';
+import { useAuth } from '@workos-inc/authkit-react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -29,6 +30,7 @@ export type AccountPopoverProps = IconButtonProps & {
 
 export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps) {
   const router = useRouter();
+  const { signOut, user } = useAuth();
 
   const pathname = usePathname();
 
@@ -49,6 +51,13 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
     },
     [handleClosePopover, router]
   );
+  const handleSignOut = async () => {
+    try {
+      await signOut({ returnTo: '/' });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -83,11 +92,11 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
       >
         <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {_myAccount?.displayName}
+            {`${user?.firstName ?? ''} ${user?.lastName ?? ''}`}
           </Typography>
 
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {_myAccount?.email}
+            {user?.email ?? ''}
           </Typography>
         </Box>
 
@@ -129,7 +138,7 @@ export function AccountPopover({ data = [], sx, ...other }: AccountPopoverProps)
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth color="error" size="medium" variant="text">
+          <Button fullWidth color="error" size="medium" variant="text" onClick={handleSignOut}>
             Logout
           </Button>
         </Box>

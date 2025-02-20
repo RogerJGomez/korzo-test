@@ -1,3 +1,5 @@
+import { useAuth } from '@workos-inc/authkit-react';
+
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 
@@ -17,10 +19,13 @@ import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
+  const { getUser } = useAuth(); // Hook de autenticación con email
+  const user = getUser();
+
   return (
     <DashboardContent maxWidth="xl">
       <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
-        Hi, Welcome back 👋
+        Hi, Welcome back {user?.firstName ?? ''}👋
       </Typography>
 
       <Grid container spacing={3}>
